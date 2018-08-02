@@ -65,7 +65,7 @@
  */
 #if ENABLED(THERMAL_PROTECTION_HOTENDS)
   #define THERMAL_PROTECTION_PERIOD 40        // Seconds
-  #define THERMAL_PROTECTION_HYSTERESIS 4     // Degrees Celsius
+  #define THERMAL_PROTECTION_HYSTERESIS 10     // Degrees Celsius
 
   /**
    * Whenever an M104, M109, or M303 increases the target temperature, the
@@ -87,13 +87,13 @@
  * Thermal Protection parameters for the bed are just as above for hotends.
  */
 #if ENABLED(THERMAL_PROTECTION_BED)
-  #define THERMAL_PROTECTION_BED_PERIOD 20    // Seconds
-  #define THERMAL_PROTECTION_BED_HYSTERESIS 2 // Degrees Celsius
+  #define THERMAL_PROTECTION_BED_PERIOD 60    // Seconds
+  #define THERMAL_PROTECTION_BED_HYSTERESIS 10 // Degrees Celsius
 
   /**
    * As described above, except for the bed (M140/M190/M303).
    */
-  #define WATCH_BED_TEMP_PERIOD 60                // Seconds
+  #define WATCH_BED_TEMP_PERIOD 300                // Seconds
   #define WATCH_BED_TEMP_INCREASE 2               // Degrees Celsius
 #endif
 
@@ -353,7 +353,7 @@
 #define Y_HOME_BUMP_MM 5
 #define Z_HOME_BUMP_MM 2
 #define HOMING_BUMP_DIVISOR { 2, 2, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
-//#define QUICK_HOME                     // If homing includes X and Y, do a diagonal move initially
+#define QUICK_HOME                       // If homing includes X and Y, do a diagonal move initially
 
 // When G28 is called, this option will make Y home before X
 //#define HOME_Y_BEFORE_X
@@ -659,7 +659,7 @@
 #if ENABLED(BABYSTEPPING)
   //#define BABYSTEP_XY              // Also enable X/Y Babystepping. Not supported on DELTA!
   #define BABYSTEP_INVERT_Z false    // Change if Z babysteps should go the other way
-  #define BABYSTEP_MULTIPLICATOR 5   // Babysteps are very small. Increase for faster motion.
+  #define BABYSTEP_MULTIPLICATOR  10 // Babysteps are very small. Increase for faster motion.
   //#define BABYSTEP_ZPROBE_OFFSET   // Enable to combine M851 and Babystepping
   #define DOUBLECLICK_FOR_Z_BABYSTEPPING // Double-click on the Status Screen for Z Babystepping.
   #define DOUBLECLICK_MAX_INTERVAL 1250 // Maximum interval between clicks, in milliseconds.
@@ -879,14 +879,14 @@
 #define ADVANCED_PAUSE_FEATURE
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #define PAUSE_PARK_RETRACT_FEEDRATE 60      // Initial retract feedrate in mm/s
-  #define PAUSE_PARK_RETRACT_LENGTH 2         // Initial retract in mm
+  #define PAUSE_PARK_RETRACT_LENGTH 4         // Initial retract in mm
                                               // It is a short retract used immediately after print interrupt before move to filament exchange position
   #define FILAMENT_CHANGE_UNLOAD_FEEDRATE 10  // Unload filament feedrate in mm/s - filament unloading can be fast
-  #define FILAMENT_CHANGE_UNLOAD_LENGTH 100   // Unload filament length from hotend in mm
+  #define FILAMENT_CHANGE_UNLOAD_LENGTH 420   // Unload filament length from hotend in mm
                                               // Longer length for bowden printers to unload filament from whole bowden tube,
                                               // shorter length for printers without bowden to unload filament from extruder only,
                                               // 0 to disable unloading for manual unloading
-  #define FILAMENT_CHANGE_LOAD_FEEDRATE 6     // Load filament feedrate in mm/s - filament loading into the bowden tube can be fast
+  #define FILAMENT_CHANGE_LOAD_FEEDRATE 8     // Load filament feedrate in mm/s - filament loading into the bowden tube can be fast
   #define FILAMENT_CHANGE_LOAD_LENGTH 0       // Load filament length over hotend in mm
                                               // Longer length for bowden printers to fast load filament into whole bowden tube over the hotend,
                                               // Short or zero length for printers without bowden where loading is not used
@@ -895,8 +895,8 @@
                                               // 0 to disable for manual extrusion
                                               // Filament can be extruded repeatedly from the filament exchange menu to fill the hotend,
                                               // or until outcoming filament color is not clear for filament color change
-  #define PAUSE_PARK_NOZZLE_TIMEOUT 45        // Turn off nozzle if user doesn't change filament within this time limit in seconds
-  #define FILAMENT_CHANGE_NUMBER_OF_ALERT_BEEPS 5 // Number of alert beeps before printer goes quiet
+  #define PAUSE_PARK_NOZZLE_TIMEOUT 120       // Turn off nozzle if user doesn't change filament within this time limit in seconds
+  #define FILAMENT_CHANGE_NUMBER_OF_ALERT_BEEPS 3 // Number of alert beeps before printer goes quiet
   #define PAUSE_PARK_NO_STEPPER_TIMEOUT       // Enable to have stepper motors hold position during filament change
                                               // even if it takes longer than DEFAULT_STEPPER_DEACTIVE_TIME.
   //#define PARK_HEAD_ON_PAUSE                // Go to filament change position on pause, return to print position on resume
@@ -1334,11 +1334,14 @@
  */
 //#define FILAMENT_WIDTH_SENSOR
 
+#define DEFAULT_STDDEV_FILAMENT_DIA 0.05    // Typical estimate for cheap filament
+//#define DEFAULT_STDDEV_FILAMENT_DIA 0.02  // Typical advertised for higher quality filament
+
 #if ENABLED(FILAMENT_WIDTH_SENSOR)
   #define FILAMENT_SENSOR_EXTRUDER_NUM 0    // Index of the extruder that has the filament sensor. :[0,1,2,3,4]
   #define MEASUREMENT_DELAY_CM        14    // (cm) The distance from the filament sensor to the melting chamber
 
-  #define FILWIDTH_ERROR_MARGIN        1.0  // (mm) If a measurement differs too much from nominal width ignore it
+  #define FILWIDTH_ERROR_MARGIN (DEFAULT_STDDEV_FILAMENT_DIA*4)  // (mm) If a measurement differs too much from nominal width ignore it
   #define MAX_MEASUREMENT_DELAY       20    // (bytes) Buffer size for stored measurements (1 byte per cm). Must be larger than MEASUREMENT_DELAY_CM.
 
   #define DEFAULT_MEASURED_FILAMENT_DIA DEFAULT_NOMINAL_FILAMENT_DIA // Set measured to nominal initially

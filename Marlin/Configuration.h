@@ -325,7 +325,7 @@
 // When temperature exceeds max temp, your heater will be switched off.
 // This feature exists to protect your hotend from overheating accidentally, but *NOT* from thermistor short/failure!
 // You should use MINTEMP for thermistor short/failure protection.
-#define HEATER_0_MAXTEMP 250
+#define HEATER_0_MAXTEMP 275
 #define HEATER_1_MAXTEMP 275
 #define HEATER_2_MAXTEMP 275
 #define HEATER_3_MAXTEMP 275
@@ -354,10 +354,15 @@
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
 
+  // Stock CR-10 tuned for 70C
+  #define  DEFAULT_Kp 22.57
+  #define  DEFAULT_Ki 1.72
+  #define  DEFAULT_Kd 73.96
+
   // Ultimaker
-  #define  DEFAULT_Kp 22.2
-  #define  DEFAULT_Ki 1.08
-  #define  DEFAULT_Kd 114
+  //#define  DEFAULT_Kp 22.2
+  //#define  DEFAULT_Ki 1.08
+  //#define  DEFAULT_Kd 114
 
   // MakerGear
   //#define  DEFAULT_Kp 7.0
@@ -383,7 +388,7 @@
 // If your configuration is significantly different than this and you don't understand the issues involved, you probably
 // shouldn't use bed PID until someone else verifies your hardware works.
 // If this is enabled, find your own PID constants below.
-//#define PIDTEMPBED
+#define PIDTEMPBED
 
 //#define BED_LIMIT_SWITCHING
 
@@ -397,11 +402,16 @@
 
   //#define PID_BED_DEBUG // Sends debug data to the serial port.
 
+  //Stock CR-10 Bed Tuned for 70C
+  #define  DEFAULT_bedKp 426.68
+  #define  DEFAULT_bedKi 78.92
+  #define  DEFAULT_bedKd 576.71
+
   //120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   //from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #define  DEFAULT_bedKp 10.00
-  #define  DEFAULT_bedKi .023
-  #define  DEFAULT_bedKd 305.4
+  //#define  DEFAULT_bedKp 10.00
+  //#define  DEFAULT_bedKi .023
+  //#define  DEFAULT_bedKd 305.4
 
   //120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   //from pidautotune
@@ -424,7 +434,7 @@
 // This option prevents a single extrusion longer than EXTRUDE_MAXLENGTH.
 // Note that for Bowden Extruders a too-small value here may prevent loading.
 #define PREVENT_LENGTHY_EXTRUDE
-#define EXTRUDE_MAXLENGTH 200
+#define EXTRUDE_MAXLENGTH 1000
 
 //===========================================================================
 //======================== Thermal Runaway Protection =======================
@@ -536,7 +546,7 @@
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 2500, 2500, 100, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 500, 500, 15, 25 }
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -544,7 +554,7 @@
  * Override with M201
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
+#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 5000 }
 
 /**
  * Default Acceleration (change/s) change = mm/s
@@ -554,8 +564,8 @@
  *   M204 R    Retract Acceleration
  *   M204 T    Travel Acceleration
  */
-#define DEFAULT_ACCELERATION          575    // X, Y, Z and E acceleration for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
+#define DEFAULT_ACCELERATION          500    // X, Y, Z and E acceleration for printing moves
+#define DEFAULT_RETRACT_ACCELERATION  500    // E acceleration for retracts
 #define DEFAULT_TRAVEL_ACCELERATION   1000    // X, Y, Z acceleration for travel (non printing) moves
 
 /**
@@ -568,7 +578,7 @@
  */
 #define DEFAULT_XJERK                 10.0
 #define DEFAULT_YJERK                 10.0
-#define DEFAULT_ZJERK                  0.3
+#define DEFAULT_ZJERK                  2.7
 #define DEFAULT_EJERK                  5.0
 
 //===========================================================================
@@ -716,7 +726,7 @@
  *     But: `M851 Z+1` with a CLEARANCE of 2  =>  2mm from bed to nozzle.
  */
 #define Z_CLEARANCE_DEPLOY_PROBE   10 // Z Clearance for Deploy/Stow
-#define Z_CLEARANCE_BETWEEN_PROBES  5 // Z Clearance between probe points
+#define Z_CLEARANCE_BETWEEN_PROBES 10 // Z Clearance between probe points
 
 // For M851 give a range for adjusting the Z probe offset
 #define Z_PROBE_OFFSET_RANGE_MIN -20
@@ -768,7 +778,7 @@
 
 //#define NO_MOTION_BEFORE_HOMING  // Inhibit movement until all axes have been homed
 
-//#define Z_HOMING_HEIGHT 4  // (in mm) Minimal z height before homing (G28) for Z clearance above the bed, clamps, ...
+//#define Z_HOMING_HEIGHT 5  // (in mm) Minimal z height before homing (G28) for Z clearance above the bed, clamps, ...
                              // Be sure you have this distance over your Z_MAX_POS in case.
 
 // Direction of endstops when homing; 1=MAX, -1=MIN
@@ -787,7 +797,7 @@
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS X_BED_SIZE
+#define X_MAX_POS X_BED_SIZE + 20
 #define Y_MAX_POS Y_BED_SIZE
 #define Z_MAX_POS 400
 
@@ -1354,13 +1364,13 @@
 // This option overrides the default number of encoder pulses needed to
 // produce one step. Should be increased for high-resolution encoders.
 //
-#define ENCODER_PULSES_PER_STEP 2
+#define ENCODER_PULSES_PER_STEP 4
 
 //
 // Use this option to override the number of step signals required to
 // move between next/prev menu items.
 //
-#define ENCODER_STEPS_PER_MENU_ITEM 5
+#define ENCODER_STEPS_PER_MENU_ITEM 4
 
 /**
  * Encoder Direction Options
@@ -1409,8 +1419,8 @@
 // Note: Test audio output with the G-Code:
 //  M300 S<frequency Hz> P<duration ms>
 //
-//#define LCD_FEEDBACK_FREQUENCY_DURATION_MS 100
-//#define LCD_FEEDBACK_FREQUENCY_HZ 1000
+//#define LCD_FEEDBACK_FREQUENCY_DURATION_MS 2
+//#define LCD_FEEDBACK_FREQUENCY_HZ 5000
 
 //
 // CONTROLLER TYPE: Standard
