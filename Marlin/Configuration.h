@@ -291,7 +291,7 @@
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_4 0
-#define TEMP_SENSOR_BED 5
+#define TEMP_SENSOR_BED 75
 
 // Dummy thermistor constant temperature readings, for use with 998 and 999
 #define DUMMY_THERMISTOR_998_VALUE 25
@@ -330,7 +330,7 @@
 #define HEATER_2_MAXTEMP 275
 #define HEATER_3_MAXTEMP 275
 #define HEATER_4_MAXTEMP 275
-#define BED_MAXTEMP 120
+#define BED_MAXTEMP 150
 
 //===========================================================================
 //============================= PID Settings ================================
@@ -402,10 +402,19 @@
 
   //#define PID_BED_DEBUG // Sends debug data to the serial port.
 
+  //M303 E-1 C8 S110
+  #define  DEFAULT_bedKp 187.18
+  #define  DEFAULT_bedKi 36.27
+  #define  DEFAULT_bedKd 241.49
+//  #define  DEFAULT_bedKp 193.29
+//  #define  DEFAULT_bedKi 32.77
+//  #define  DEFAULT_bedKd 285.03
+
+
   //Stock CR-10 Bed Tuned for 70C
-  #define  DEFAULT_bedKp 426.68
-  #define  DEFAULT_bedKi 78.92
-  #define  DEFAULT_bedKd 576.71
+  //#define  DEFAULT_bedKp 426.68
+  //#define  DEFAULT_bedKi 78.92
+  //#define  DEFAULT_bedKd 576.71
 
   //120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   //from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
